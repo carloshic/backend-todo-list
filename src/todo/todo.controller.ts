@@ -1,9 +1,8 @@
 import { Controller, Post, Body, Res, HttpStatus, Get, Param, Delete, Put } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { IToDo } from './todo.interface';
-import { CRStatus } from '../helper/custom-response-status';
-import { CResponse } from '../helper/custom-response';
-
+import { CRStatus } from '../helpers/custom-response-status';
+import { CResponse } from '../helpers/custom-response';
 
 @Controller('todo')
 export class TodoController {
@@ -60,6 +59,16 @@ export class TodoController {
 
         this.todoService.delete(id).then(() => {
             response.status(HttpStatus.OK).json(new CResponse(CRStatus.OK, 'Tarea borrada con exito'));
+        }).catch((error) => {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new CResponse(CRStatus.ERROR, error.message));
+        });
+    }
+
+    @Get('/search/:term')
+    async search(@Res() response,  @Param('term') term: string) {
+
+        this.todoService.search(term).then((toDoList: IToDo[]) => {
+            response.status(HttpStatus.OK).json(new CResponse(CRStatus.OK, 'Exito', toDoList));
         }).catch((error) => {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new CResponse(CRStatus.ERROR, error.message));
         });

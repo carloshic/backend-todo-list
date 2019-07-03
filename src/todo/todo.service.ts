@@ -44,4 +44,9 @@ export class TodoService {
     async delete(id: string): Promise<IToDo> {
         return await this.toDoModel.findByIdAndDelete(id).exec();
     }
+
+    async search(term: string) {
+        const regex = new RegExp(term, 'i');
+        return this.toDoModel.find({}).or([{ title: regex }, { description: regex }]).exec();
+    }
 }
