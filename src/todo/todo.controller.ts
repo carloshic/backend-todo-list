@@ -8,7 +8,7 @@ import { CResponse } from '../helpers/custom-response';
 export class TodoController {
     constructor(private todoService: TodoService) {}
     @Get()
-    async getAll(@Res() response) {
+    getAll(@Res() response) {
 
         this.todoService.findAll().then(( toDoList: IToDo[] ) => {
             if ( toDoList.length > 0 ) {
@@ -21,7 +21,7 @@ export class TodoController {
         });
     }
     @Get(':id')
-    async getById(@Res() response,  @Param('id') id: string) {
+    getById(@Res() response,  @Param('id') id: string) {
 
         this.todoService.findById(id).then(( toDo: IToDo ) => {
             if ( toDo ) {
@@ -35,7 +35,7 @@ export class TodoController {
     }
 
     @Post()
-    async create(@Res() response,  @Body() todo: IToDo) {
+    create(@Res() response,  @Body() todo: IToDo) {
 
         this.todoService.create(todo).then(( toDo: IToDo ) => {
             response.status(HttpStatus.OK).json(new CResponse(CRStatus.OK, 'Tarea creada con exito', toDo));
@@ -45,7 +45,7 @@ export class TodoController {
     }
 
     @Put(':id')
-    async update(@Res() response,  @Param('id') id: string, @Body() todo: IToDo) {
+    update(@Res() response,  @Param('id') id: string, @Body() todo: IToDo) {
 
         this.todoService.update(id, todo).then(( toDo: IToDo ) => {
             response.status(HttpStatus.OK).json(new CResponse(CRStatus.OK, 'Tarea actualizada con exito', toDo));
@@ -55,7 +55,7 @@ export class TodoController {
     }
 
     @Delete(':id')
-    async delete(@Res() response,  @Param('id') id: string) {
+    delete(@Res() response,  @Param('id') id: string) {
 
         this.todoService.delete(id).then(() => {
             response.status(HttpStatus.OK).json(new CResponse(CRStatus.OK, 'Tarea borrada con exito'));
@@ -65,7 +65,7 @@ export class TodoController {
     }
 
     @Get('/search/:term')
-    async search(@Res() response,  @Param('term') term: string) {
+    search(@Res() response,  @Param('term') term: string) {
 
         this.todoService.search(term).then((toDoList: IToDo[]) => {
             response.status(HttpStatus.OK).json(new CResponse(CRStatus.OK, 'Exito', toDoList));
